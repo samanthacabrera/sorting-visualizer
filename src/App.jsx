@@ -6,6 +6,7 @@ function App() {
   const [currentIndices, setCurrentIndices] = useState([]);
   const [sortedIndices, setSortedIndices] = useState([]);
   const [algorithm, setAlgorithm] = useState("bubble");
+  const [explanation, setExplanation] = useState("");
 
   const colors = {
     bubble: "#390099", // Purple
@@ -50,6 +51,7 @@ function App() {
   // Bubble Sort Algorithm
   const bubbleSort = async () => {
     setIsSorting(true);
+    setExplanation("Bubble Sort works by comparing two numbers at a time. If a bigger number comes before a smaller one, it swaps them. This keeps happening until the biggest numbers 'bubble up' to the end and the whole list is sorted.");
     const arrayCopy = [...array];
     
     for (let i = 0; i < arrayCopy.length - 1; i++) {
@@ -146,9 +148,9 @@ function App() {
         ))}
       </div>
       
-      <div className="mt-12 text-sm">
+      <div className="mt-12 max-w-4xl">
         {isSorting ? (
-          <p>Sorting with {algorithm.charAt(0).toUpperCase() + algorithm.slice(1)} Sort...</p>
+          <p>{explanation}</p>
         ) : (
           <p>Select an algorithm and press Sort</p>
         )}
