@@ -1,12 +1,15 @@
-import './App.css'
+import { useState, useEffect } from "react";
+import "./App.css";
 
 function App() {
 
+
   return (
-    <div className="flex justify-center items-center h-screen w-screen">
-      <h1 className="text-4xl">vite-react-tailwind-template</h1>
+    <div className="flex flex-col">
+      <h1 className="text-2xl">Sorting Visualizer</h1>
+
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
