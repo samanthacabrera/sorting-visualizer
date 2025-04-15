@@ -75,6 +75,64 @@ function App() {
     setIsSorting(false);
   };
 
+  // Merge Sort Algorithm
+  const mergeSort = async () => {
+    setIsSorting(true);
+    setExplanation("Merge Sort works by splitting the list in half again and again until each piece has just one number. Then, it 'merges' the pieces back together in the right order.");
+    const arrayCopy = [...array];
+
+    const auxiliaryArray = [...arrayCopy];
+    
+    await mergeSortHelper(arrayCopy, 0, arrayCopy.length - 1, auxiliaryArray);
+
+    setSortedIndices([...Array(arrayCopy.length).keys()]);
+    setIsSorting(false);
+  };
+  // Recursive function to divide the array and merge
+  const mergeSortHelper = async (mainArray, startIdx, endIdx, auxiliaryArray) => {
+    if (startIdx === endIdx) return;
+     // Find the middle point to divide the array
+    const middleIdx = Math.floor((startIdx + endIdx) / 2);
+    await mergeSortHelper(auxiliaryArray, startIdx, middleIdx, mainArray);
+    await mergeSortHelper(auxiliaryArray, middleIdx + 1, endIdx, mainArray);
+    // Merge the sorted halves
+    await doMerge(mainArray, startIdx, middleIdx, endIdx, auxiliaryArray);
+  };
+
+  const doMerge = async (mainArray, startIdx, middleIdx, endIdx, auxiliaryArray) => {
+    let k = startIdx; // Pointer for where to place the next element in mainArray
+    let i = startIdx; // Pointer for the left half
+    let j = middleIdx + 1; // Pointer for the right half
+
+    while (i <= middleIdx && j <= endIdx) {
+       // Highlight compared bars
+      setCurrentIndices([i, j]);
+      await sleep(ANIMATION_SPEED_MS);
+      if (auxiliaryArray[i] <= auxiliaryArray[j]) {
+        mainArray[k++] = auxiliaryArray[i++];
+      } else {
+        mainArray[k++] = auxiliaryArray[j++];
+      }
+      setArray([...mainArray]);
+    }
+
+    // Copy any remaining elements from the left half
+    while (i <= middleIdx) {
+      setCurrentIndices([i]);
+      await sleep(ANIMATION_SPEED_MS);
+      mainArray[k++] = auxiliaryArray[i++];
+      setArray([...mainArray]);
+    }
+
+    // Copy any remaining elements from the right half
+    while (j <= endIdx) {
+      setCurrentIndices([j]);
+      await sleep(ANIMATION_SPEED_MS);
+      mainArray[k++] = auxiliaryArray[j++];
+      setArray([...mainArray]);
+    }
+  };
+
   // Start the selected sorting algorithm
   const startSort = () => {
     if (isSorting) return;
@@ -105,6 +163,7 @@ function App() {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen w-screen">
+      <h1 className="text-6xl tracking-wide mb-12">Sorting Algorithms Visualizer</h1>
       <div className="flex gap-6 m-6">
         <button
           onClick={generateArray}
@@ -124,6 +183,15 @@ function App() {
         >
           Bubble Sort
         </button>
+        <button
+            onClick={() => setAlgorithm("merge")}
+            disabled={isSorting}
+            className={`px-4 py-2 border-2 rounded ${
+              algorithm === "merge" ? "bg-black text-white border-black" : "bg-white text-black border-black hover:bg-black hover:text-white"
+            } transition-all duration-200`}
+          >
+            Merge Sort
+          </button>
         <button
           onClick={startSort}
           disabled={isSorting}
@@ -152,7 +220,7 @@ function App() {
         {isSorting ? (
           <p>{explanation}</p>
         ) : (
-          <p>Select an algorithm and press Sort</p>
+          <p>Select an algorithm and press 'Sort Array'.</p>
         )}
       </div>
     </div>
