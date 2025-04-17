@@ -18,15 +18,25 @@ The app will be available at http://localhost:5173.
 
 Sorting algorithms are ways to arrange data in a specific order—usually ascending or descending. Each algorithm works differently and has its own strengths and weaknesses. This project includes five popular algorithms:
 
-1. Bubble Sort: It repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. This process is repeated until the list is sorted. The algorithm gets its name because smaller elements "bubble" to the top of the list.
+1. **Bubble Sort** compares pairs of nums and swaps if needed, until largest 'bubbles' to end.
 
-2. Merge Sort: It divides the array into two halves, recursively sorts each half, and then merges the sorted halves. This process continues until the array is sorted.
+![Bubble Sort](./public/gifs/bubble.gif)
 
-3. Quick Sort: It selects a "pivot" element from the array and partitions the other elements into two sub-arrays, according to whether they are less than or greater than the pivot. The sub-arrays are then sorted recursively. It's fast on average, but performance depends on how well the pivot is chosen.
+2. **Merge Sort** divides the list into smaller sublists until each contains one element, then 'merges' the sublists in sorted order.
 
-4. Insertion Sort: It takes each element from the unsorted portion and places it in its correct position within the sorted portion. This algorithm is more efficient on small or nearly sorted datasets.
+![Merge Sort](./public/gifs/merge.gif)
 
-5. Selection Sort: It repeatedly finds the smallest (or largest) element in the unsorted portion of the array and swaps it with the first unsorted element. This process is repeated until the array is sorted.
+3. **Quick Sort** selects a pivot, separates smaller and bigger numbers around it, then sorts each part.
+
+![Quick Sort](./public/gifs/quick.gif)
+
+4. **Insertion Sort** goes through the list one number at a time, inserting each one into its correct spot among the already sorted numbers.
+
+![Insertion Sort](./public/gifs/insertion.gif)
+
+5. **Selection Sort** repeatedly finds the smallest unsorted element and swaps it into its correct position in the sorted part of the list.
+
+![Selection Sort](./public/gifs/selection.gif)
 
 </br>
 

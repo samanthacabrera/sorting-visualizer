@@ -353,7 +353,7 @@ function App() {
             onChange={(e) => setAnimationSpeed(Number(e.target.value))}
             className="absolute inset-0 w-full h-full bg-gray-200 rounded-lg appearance-none cursor-pointer"
             style={{
-              writingMode: "vertical-rl", 
+              writingMode: "vertical-rl", // makes slider vertical 
               transform: "rotate(180deg)",
               transformOrigin: "center", 
             }}
