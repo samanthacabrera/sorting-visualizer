@@ -1,291 +1,239 @@
 import { useState, useEffect } from "react";
 
 function App() {
-  const [array, setArray] = useState([]);
-  const [isSorting, setIsSorting] = useState(false);
-  const [currentIndices, setCurrentIndices] = useState([]);
-  const [sortedIndices, setSortedIndices] = useState([]);
-  const [algorithm, setAlgorithm] = useState("bubble");
-  const [explanation, setExplanation] = useState("");
+  const [array, setArray] = useState([]); 
+  const [isSorting, setIsSorting] = useState(false); 
+  const [currentIndices, setCurrentIndices] = useState([]); 
+  const [sortedIndices, setSortedIndices] = useState([]); 
+  const [algorithm, setAlgorithm] = useState("bubble"); 
+  const [explanation, setExplanation] = useState(""); 
 
   const colors = {
-    compare: "#00BFFF", // Blue 
-    sorted: "#8AE234",  // Green 
+    compare: "#00BFFF", // blue
+    sorted: "#8AE234",  // green
   };
 
+  // later: make animation speed adjustable
   const ANIMATION_SPEED_MS = 100;
 
-  // Generate a new random array
   const generateArray = () => {
     const newArray = [];
+    // gen 30 random nums between 1 and 100
     for (let i = 0; i < 30; i++) {
       newArray.push(Math.floor(Math.random() * 100) + 1);
     }
-    setArray(newArray);
-    setCurrentIndices([]);
-    setSortedIndices([]);
+    setArray(newArray); // update array state
+    setCurrentIndices([]); // reset compared indices
+    setSortedIndices([]); // reset sorted indices
   };
 
+  // gen array on mount
   useEffect(() => {
     generateArray();
   }, []);
 
+  // pause for animation
   const sleep = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
   };
 
+  // get bar color based on state
   const getBarColor = (index) => {
-    if (currentIndices.includes(index)) {
-      return colors.compare;
-    }
-    if (sortedIndices.includes(index)) {
-      return colors.sorted;
-    }
-    return "#CCCCCC"; 
+    if (currentIndices.includes(index)) return colors.compare;
+    if (sortedIndices.includes(index)) return colors.sorted;
+    return "#CCCCCC"; // default for unsorted
   };
 
-  // Bubble Sort Algorithm
+  // BUBBLE SORT 
   const bubbleSort = async () => {
-    setIsSorting(true);
-    setExplanation("Bubble Sort works by comparing two numbers at a time. If a bigger number comes before a smaller one, it swaps them. This keeps happening until the biggest numbers 'bubble up' to the end and the whole list is sorted.");
-    const arrayCopy = [...array];
+    setIsSorting(true); // set sorting in progress
+    setExplanation("Bubble Sort compares pairs of nums and swaps if needed, until largest 'bubbles' to end.");
+    const arrayCopy = [...array]; // make copy of array
     
+    // outer loop: iterate through array
     for (let i = 0; i < arrayCopy.length - 1; i++) {
+      // inner loop: compare adj elements
       for (let j = 0; j < arrayCopy.length - 1 - i; j++) {
-        setCurrentIndices([j, j + 1]);
-        await sleep(ANIMATION_SPEED_MS);
-        
+        setCurrentIndices([j, j + 1]); // highlight compared elements
+        await sleep(ANIMATION_SPEED_MS); // pause for anim
         if (arrayCopy[j] > arrayCopy[j + 1]) {
-          // Swap elements
-          [arrayCopy[j], arrayCopy[j + 1]] = [arrayCopy[j + 1], arrayCopy[j]];
-          setArray([...arrayCopy]);
+          [arrayCopy[j], arrayCopy[j + 1]] = [arrayCopy[j + 1], arrayCopy[j]]; // swap
+          setArray([...arrayCopy]); // update state
         }
       }
-      // Mark this element as sorted
-      setSortedIndices(prev => [...prev, arrayCopy.length - 1 - i]);
+      setSortedIndices(prev => [...prev, arrayCopy.length - 1 - i]); // mark sorted
     }
-    
-    // Mark the first element as sorted too
-    setSortedIndices(prev => [...prev, 0]);
-    setCurrentIndices([]);
-    setIsSorting(false);
+    setSortedIndices(prev => [...prev, 0]); // mark first as sorted
+    setCurrentIndices([]); // reset indices
+    setIsSorting(false); // done sorting
   };
 
-  // Merge Sort Algorithm
+  // MERGE SORT 
   const mergeSort = async () => {
-    setIsSorting(true);
-    setExplanation("Merge Sort works as a two-step process: first divide the list into smaller pieces, then merge those pieces back together in the correct order. It's called 'merge' because the main work happens when combining (merging) the smaller sorted lists into larger ones.");
-    const arrayCopy = [...array];
-
-    const auxiliaryArray = [...arrayCopy];
-    
-    await mergeSortHelper(arrayCopy, 0, arrayCopy.length - 1, auxiliaryArray);
-
-    setSortedIndices([...Array(arrayCopy.length).keys()]);
-    setCurrentIndices([]);
-    setIsSorting(false);
+    setIsSorting(true); // start sorting
+    setExplanation("Merge Sort divides the list, then merges in order."); // explain merge sort
+    const arrayCopy = [...array]; // copy array for sorting
+    const auxiliaryArray = [...arrayCopy]; // auxiliary array for merging
+    await mergeSortHelper(arrayCopy, 0, arrayCopy.length - 1, auxiliaryArray); // start merge sort
+    setSortedIndices([...Array(arrayCopy.length).keys()]); // mark all as sorted
+    setCurrentIndices([]); // reset current indices
+    setIsSorting(false); // end sorting
   };
-  // Recursive function to divide the array and merge
+
+  // merge sort helper (recursion)
   const mergeSortHelper = async (mainArray, startIdx, endIdx, auxiliaryArray) => {
-    if (startIdx === endIdx) return;
-     // Find the middle point to divide the array
+    if (startIdx === endIdx) return; // base case: one element
     const middleIdx = Math.floor((startIdx + endIdx) / 2);
-    await mergeSortHelper(auxiliaryArray, startIdx, middleIdx, mainArray);
-    await mergeSortHelper(auxiliaryArray, middleIdx + 1, endIdx, mainArray);
-    // Merge the sorted halves
-    await doMerge(mainArray, startIdx, middleIdx, endIdx, auxiliaryArray);
+    await mergeSortHelper(auxiliaryArray, startIdx, middleIdx, mainArray); // sort left half
+    await mergeSortHelper(auxiliaryArray, middleIdx + 1, endIdx, mainArray); // sort right half
+    await doMerge(mainArray, startIdx, middleIdx, endIdx, auxiliaryArray); // merge sorted halves
   };
 
+  // merge two sorted halves
   const doMerge = async (mainArray, startIdx, middleIdx, endIdx, auxiliaryArray) => {
-    let k = startIdx;
-    let i = startIdx;
-    let j = middleIdx + 1;
-    const tempSortedIndices = [];
-
+    let k = startIdx, i = startIdx, j = middleIdx + 1;
+    const tempSortedIndices = []; // store sorted indices
     while (i <= middleIdx && j <= endIdx) {
-      setCurrentIndices([i, j]);
-      await sleep(ANIMATION_SPEED_MS);
-
+      setCurrentIndices([i, j]); // highlight compared elements
+      await sleep(ANIMATION_SPEED_MS); // pause for animation
       if (auxiliaryArray[i] <= auxiliaryArray[j]) {
-        mainArray[k] = auxiliaryArray[i];
+        mainArray[k] = auxiliaryArray[i]; // choose element from left half
         tempSortedIndices.push(k);
         i++;
       } else {
-        mainArray[k] = auxiliaryArray[j];
+        mainArray[k] = auxiliaryArray[j]; // choose element from right half
         tempSortedIndices.push(k);
         j++;
       }
       k++;
-      setArray([...mainArray]);
+      setArray([...mainArray]); // update array state
     }
 
+    // copy remaining elements from left half
     while (i <= middleIdx) {
-      setCurrentIndices([i]);
-      await sleep(ANIMATION_SPEED_MS);
+      setCurrentIndices([i]); // highlight element
+      await sleep(ANIMATION_SPEED_MS); // pause for animation
       mainArray[k] = auxiliaryArray[i];
       tempSortedIndices.push(k);
       i++;
       k++;
-      setArray([...mainArray]);
+      setArray([...mainArray]); // update array state
     }
-
+    // copy remaining elements from right half
     while (j <= endIdx) {
-      setCurrentIndices([j]);
-      await sleep(ANIMATION_SPEED_MS);
+      setCurrentIndices([j]); // highlight element
+      await sleep(ANIMATION_SPEED_MS); // pause for animation
       mainArray[k] = auxiliaryArray[j];
       tempSortedIndices.push(k);
       j++;
       k++;
-      setArray([...mainArray]);
+      setArray([...mainArray]); // update array state
     }
-
-    // Gradually mark the merged elements as sorted
-    setSortedIndices(prev => [...new Set([...prev, ...tempSortedIndices])]);
-    setCurrentIndices([]);
+    setSortedIndices(prev => [...new Set([...prev, ...tempSortedIndices])]); // update sorted indices
+    setCurrentIndices([]); // reset current indices
   };
 
-  // Insertion Sort Algorithm
+  // INSERTION SORT 
   const insertionSort = async () => {
-    setIsSorting(true);
-    setExplanation("Insertion Sort works by inserting each number into its correct position. We take one number at a time and insert it exactly where it belongs among the numbers we've already sorted. It's like taking a new number and finding its proper place in an already organized section.");
-    
-    const arrayCopy = [...array];
-
+    setIsSorting(true); // start sorting
+    setExplanation("Insertion Sort inserts each num into its correct position."); // explain insertion sort
+    const arrayCopy = [...array]; // copy array to sort
     for (let i = 1; i < arrayCopy.length; i++) {
-      let key = arrayCopy[i];
-      let j = i - 1;
-
-      // Highlight the key
-      setCurrentIndices([i]);
-      await sleep(ANIMATION_SPEED_MS);
-
+      let key = arrayCopy[i], j = i - 1;
+      setCurrentIndices([i]); // highlight key
+      await sleep(ANIMATION_SPEED_MS); // pause for animation
       while (j >= 0 && arrayCopy[j] > key) {
-        setCurrentIndices([j, j + 1]);
-        arrayCopy[j + 1] = arrayCopy[j];
+        setCurrentIndices([j, j + 1]); // highlight moved element
+        arrayCopy[j + 1] = arrayCopy[j]; // shift element right
         j--;
-        setArray([...arrayCopy]);
-        await sleep(ANIMATION_SPEED_MS);
+        setArray([...arrayCopy]); // update array
+        await sleep(ANIMATION_SPEED_MS); // pause for animation
       }
-
-      arrayCopy[j + 1] = key;
-      setArray([...arrayCopy]);
-      await sleep(ANIMATION_SPEED_MS);
+      arrayCopy[j + 1] = key; // place key in correct position
+      setArray([...arrayCopy]); // update array
+      await sleep(ANIMATION_SPEED_MS); // pause for animation
     }
-
-    setSortedIndices([...Array(arrayCopy.length).keys()]);
-    setCurrentIndices([]);
-    setIsSorting(false);
+    setSortedIndices([...Array(arrayCopy.length).keys()]); // mark all as sorted
+    setCurrentIndices([]); // reset current indices
+    setIsSorting(false); // end sorting
   };
 
-  // Selection Sort Algorithm
+  // SELECTION SORT 
   const selectionSort = async () => {
-    setIsSorting(true);
-    setExplanation("Selection Sort works by repeatedly 'selecting' the smallest remaining element. For each position in the list, it selects the smallest number from the unsorted portion and places it there. It builds the sorted list one selection at a time, always picking the smallest available number next.");
-    
-    const arrayCopy = [...array];
-    const sorted = [];
-
+    setIsSorting(true); // start sorting
+    setExplanation("Selection Sort picks smallest element and places it."); // explain selection sort
+    const arrayCopy = [...array]; // copy the array to sort
+    const sorted = []; // store sorted indices
     for (let i = 0; i < arrayCopy.length; i++) {
-      let minIndex = i;
-
+      let minIndex = i; // assume current element is the smallest
       for (let j = i + 1; j < arrayCopy.length; j++) {
-        setCurrentIndices([minIndex, j]);
-        await sleep(ANIMATION_SPEED_MS);
-        if (arrayCopy[j] < arrayCopy[minIndex]) {
-          minIndex = j;
-        }
+        setCurrentIndices([minIndex, j]); // highlight current pair
+        await sleep(ANIMATION_SPEED_MS); // pause for animation
+        if (arrayCopy[j] < arrayCopy[minIndex]) minIndex = j; // find smaller element
       }
-
       if (minIndex !== i) {
-        [arrayCopy[i], arrayCopy[minIndex]] = [arrayCopy[minIndex], arrayCopy[i]];
-        setArray([...arrayCopy]);
-        await sleep(ANIMATION_SPEED_MS);
+        [arrayCopy[i], arrayCopy[minIndex]] = [arrayCopy[minIndex], arrayCopy[i]]; // swap elements
+        setArray([...arrayCopy]); // update array
+        await sleep(ANIMATION_SPEED_MS); // pause for animation
       }
-
-      // Mark i as sorted
-      sorted.push(i);
-      setSortedIndices([...sorted]);
+      sorted.push(i); // mark current index as sorted
+      setSortedIndices([...sorted]); // update sorted indices
     }
-
-    setCurrentIndices([]);
-    setIsSorting(false);
+    setCurrentIndices([]); // reset current indices
+    setIsSorting(false); // end sorting
   };
 
-  // Quick Sort Algorithm
+  // QUICK SORT 
   const quickSort = async () => {
-    setIsSorting(true);
-    setExplanation("Quick Sort works by selecting a 'pivot' number, then quickly arranging all smaller numbers before it and all larger numbers after it. This process repeats on the smaller sections until everything is sorted. It is typically faster than other simple sorting algorithms.");
-    const arrayCopy = [...array];
-
-    await quickSortHelper(arrayCopy, 0, arrayCopy.length - 1);
-
-    // After sorting, mark all as sorted
-    setSortedIndices([...Array(arrayCopy.length).keys()]);
-    setCurrentIndices([]);
-    setIsSorting(false);
+    setIsSorting(true); // start sorting
+    setExplanation("Quick Sort selects a pivot and sorts around it."); // explain quicksort
+    const arrayCopy = [...array]; // copy the array to sort
+    await quickSortHelper(arrayCopy, 0, arrayCopy.length - 1); // run quicksort helper
+    setSortedIndices([...Array(arrayCopy.length).keys()]); // mark all as sorted
+    setCurrentIndices([]); // reset current indices
+    setIsSorting(false); // end sorting
   };
 
-  // Helper for recursive Quick Sort
+  // quick sort recursion helper
   const quickSortHelper = async (arr, low, high) => {
     if (low < high) {
-      const pivotIndex = await partition(arr, low, high);
-      
-      // ✅ Mark the pivot as sorted immediately
-      setSortedIndices(prev => [...prev, pivotIndex]);
-      
-      await quickSortHelper(arr, low, pivotIndex - 1);
-      await quickSortHelper(arr, pivotIndex + 1, high);
+      const pivotIndex = await partition(arr, low, high); // partition the array
+      setSortedIndices(prev => [...prev, pivotIndex]); // mark pivot as sorted
+      await quickSortHelper(arr, low, pivotIndex - 1); // sort left
+      await quickSortHelper(arr, pivotIndex + 1, high); // sort right
     }
   };
 
-  // Partition the array around the pivot
+  // partition for quick sort
   const partition = async (arr, low, high) => {
-    let pivot = arr[high]; // Pivot element
-    let i = low - 1; // Index of smaller element
-
+    let pivot = arr[high], i = low - 1; // set pivot and initial index
     for (let j = low; j < high; j++) {
-      setCurrentIndices([j, high]);
-      await sleep(ANIMATION_SPEED_MS);
-
+      setCurrentIndices([j, high]); // highlight current pair
+      await sleep(ANIMATION_SPEED_MS); // pause for animation
       if (arr[j] < pivot) {
-        i++;
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-        setArray([...arr]);
-        await sleep(ANIMATION_SPEED_MS);
+        i++; // move i right if element is smaller than pivot
+        [arr[i], arr[j]] = [arr[j], arr[i]]; // swap elements
+        setArray([...arr]); // update array
+        await sleep(ANIMATION_SPEED_MS); // pause for animation
       }
     }
-    // Swap pivot to correct position
-    [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
-    setArray([...arr]);
-    await sleep(ANIMATION_SPEED_MS);
-    return i + 1;
+    [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]]; // move pivot to correct position
+    setArray([...arr]); // update array
+    await sleep(ANIMATION_SPEED_MS); // pause for animation
+    return i + 1; // return pivot index
   };
 
-  // Start the selected sorting algorithm
   const startSort = () => {
     if (isSorting) return;
-    
     setCurrentIndices([]);
     setSortedIndices([]);
-    
     switch(algorithm) {
-      case "bubble":
-        bubbleSort();
-        break;
-      case "insertion":
-        insertionSort();
-        break;
-      case "selection":
-        selectionSort();
-        break;
-      case "quick":
-        quickSort();
-        break;
-      case "merge":
-        mergeSort();
-        break;
-      default:
-        bubbleSort();
+      case "bubble": bubbleSort(); break;
+      case "insertion": insertionSort(); break;
+      case "selection": selectionSort(); break;
+      case "quick": quickSort(); break;
+      case "merge": mergeSort(); break;
+      default: bubbleSort(); // default to bubble
     }
   };
 
@@ -312,34 +260,34 @@ function App() {
             Merge Sort
         </button>
         <button
-          onClick={() => setAlgorithm("insertion")}
-          disabled={isSorting}
-          className={`px-4 py-2 border-2 rounded ${
-            algorithm === "insertion" ? "bg-black text-white border-black" : "bg-white text-black border-black hover:bg-black hover:text-white"
-          } transition-all duration-200`}
-        >
-          Insertion Sort
+            onClick={() => setAlgorithm("quick")}
+            disabled={isSorting}
+            className={`px-4 py-2 border-2 rounded ${
+              algorithm === "quick" ? "bg-black text-white border-black" : "bg-white text-black border-black hover:bg-black hover:text-white"
+            } transition-all duration-200`}
+          >
+            Quick Sort
+        </button>   
+        <button
+            onClick={() => setAlgorithm("insertion")}
+            disabled={isSorting}
+            className={`px-4 py-2 border-2 rounded ${
+              algorithm === "insertion" ? "bg-black text-white border-black" : "bg-white text-black border-black hover:bg-black hover:text-white"
+            } transition-all duration-200`}
+          >
+            Insertion Sort
         </button>
         <button
-          onClick={() => setAlgorithm("selection")}
-          disabled={isSorting}
-          className={`px-4 py-2 border-2 rounded ${
-            algorithm === "selection" ? "bg-black text-white border-black" : "bg-white text-black border-black hover:bg-black hover:text-white"
-          } transition-all duration-200`}
-        >
-          Selection Sort
-        </button>
-        <button
-          onClick={() => setAlgorithm("quick")}
-          disabled={isSorting}
-          className={`px-4 py-2 border-2 rounded ${
-            algorithm === "quick" ? "bg-black text-white border-black" : "bg-white text-black border-black hover:bg-black hover:text-white"
-          } transition-all duration-200`}
-        >
-          Quick Sort
+            onClick={() => setAlgorithm("selection")}
+            disabled={isSorting}
+            className={`px-4 py-2 border-2 rounded ${
+              algorithm === "selection" ? "bg-black text-white border-black" : "bg-white text-black border-black hover:bg-black hover:text-white"
+            } transition-all duration-200`}
+          >
+            Selection Sort
         </button>
       </div>
-
+      
       <div className="flex gap-6 m-2">
         <button
           onClick={generateArray}
@@ -360,7 +308,7 @@ function App() {
           Sort Array
         </button>
       </div>
-      
+
       <div className="flex items-end h-64 w-full justify-center">
         {array.map((value, index) => (
           <div
