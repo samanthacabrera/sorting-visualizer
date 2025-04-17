@@ -71,7 +71,7 @@ function App() {
   // MERGE SORT 
   const mergeSort = async () => {
     setIsSorting(true); // start sorting
-    setExplanation("Merge Sort divides the list, then merges in order."); // explain merge sort
+    setExplanation("Merge Sort divides the list into smaller sublists until each contains one element, then 'merges' the sublists in sorted order."); // explain merge sort
     const arrayCopy = [...array]; // copy array for sorting
     const auxiliaryArray = [...arrayCopy]; // auxiliary array for merging
     await mergeSortHelper(arrayCopy, 0, arrayCopy.length - 1, auxiliaryArray); // start merge sort
@@ -136,32 +136,47 @@ function App() {
   // INSERTION SORT 
   const insertionSort = async () => {
     setIsSorting(true); // start sorting
-    setExplanation("Insertion Sort inserts each num into its correct position."); // explain insertion sort
-    const arrayCopy = [...array]; // copy array to sort
+    setExplanation("Insertion Sort goes through the list one number at a time, inserting each one into its correct spot among the already sorted numbers."); // explain insertion sort
+    const arrayCopy = [...array]; // make copy of array
+
+    const tempSorted = []; // store sorted indices
+
+    // loop through array starting from second element
     for (let i = 1; i < arrayCopy.length; i++) {
-      let key = arrayCopy[i], j = i - 1;
-      setCurrentIndices([i]); // highlight key
+      let key = arrayCopy[i]; // current element to insert
+      let j = i - 1; // index to compare against
+
+      setCurrentIndices([i]); // highlight current key
       await sleep(ANIMATION_SPEED_MS); // pause for animation
+
+      // move elements greater than key one position to the right
       while (j >= 0 && arrayCopy[j] > key) {
-        setCurrentIndices([j, j + 1]); // highlight moved element
+        setCurrentIndices([j, j + 1]); // highlight elements being compared
         arrayCopy[j + 1] = arrayCopy[j]; // shift element right
         j--;
-        setArray([...arrayCopy]); // update array
+        setArray([...arrayCopy]); // update array state
         await sleep(ANIMATION_SPEED_MS); // pause for animation
       }
-      arrayCopy[j + 1] = key; // place key in correct position
-      setArray([...arrayCopy]); // update array
+
+      arrayCopy[j + 1] = key; // insert key into correct position
+      setArray([...arrayCopy]); // update array state
       await sleep(ANIMATION_SPEED_MS); // pause for animation
+
+      tempSorted.push(i); // mark current index as sorted
+      setSortedIndices([...tempSorted]); // update sorted indices
     }
-    setSortedIndices([...Array(arrayCopy.length).keys()]); // mark all as sorted
-    setCurrentIndices([]); // reset current indices
-    setIsSorting(false); // end sorting
+
+    // after loop, mark all elements as sorted
+    setSortedIndices([...Array(arrayCopy.length).keys()]); 
+
+    setCurrentIndices([]); // reset compared indices
+    setIsSorting(false); // done sorting
   };
 
   // SELECTION SORT 
   const selectionSort = async () => {
     setIsSorting(true); // start sorting
-    setExplanation("Selection Sort picks smallest element and places it."); // explain selection sort
+    setExplanation("Selection Sort repeatedly finds the smallest unsorted element and swaps it into its correct position in the sorted part of the list."); // explain selection sort
     const arrayCopy = [...array]; // copy the array to sort
     const sorted = []; // store sorted indices
     for (let i = 0; i < arrayCopy.length; i++) {
@@ -186,7 +201,7 @@ function App() {
   // QUICK SORT 
   const quickSort = async () => {
     setIsSorting(true); // start sorting
-    setExplanation("Quick Sort selects a pivot and sorts around it."); // explain quicksort
+    setExplanation("Quick Sort picks a pivot, separates smaller and bigger numbers around it, then sorts each part."); // explain quicksort
     const arrayCopy = [...array]; // copy the array to sort
     await quickSortHelper(arrayCopy, 0, arrayCopy.length - 1); // run quicksort helper
     setSortedIndices([...Array(arrayCopy.length).keys()]); // mark all as sorted
