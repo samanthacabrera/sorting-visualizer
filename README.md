@@ -14,9 +14,8 @@ npm run dev
 The app will be available at http://localhost:5173.
 </br>
 
-<details>
-<summary><strong>Understanding the Algorithms</strong></summary>
-</br>
+**Understanding the Algorithms**
+
 Sorting algorithms are ways to arrange data in a specific order—usually ascending or descending. Each algorithm works differently and has its own strengths and weaknesses. This project includes five popular algorithms:
 
 1. Bubble Sort: It repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. This process is repeated until the list is sorted. The algorithm gets its name because smaller elements "bubble" to the top of the list.
