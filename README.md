@@ -1,8 +1,8 @@
-#### Sorting Algorithm Visualizer
+### Sorting Algorithm Visualizer
 
 This web app lets you see how different sorting algorithms work through interactive visualizations. It supports a variety of sorting algorithms, including Bubble Sort, Merge Sort, Quick Sort, Insertion Sort, and Selection Sort.
 
-#### Installation
+### Installation
 
 ```bash
 git clone https://github.com/samanthacabrera/sorting-visualizer
@@ -12,31 +12,52 @@ npm run dev
 ```
 
 The app will be available at http://localhost:5173.
+
 </br>
 
-**Understanding the Algorithms**
+### Understanding the Algorithms
 
 Sorting algorithms are ways to arrange data in a specific order—usually ascending or descending. Each algorithm works differently and has its own strengths and weaknesses. This project includes five popular algorithms:
 
-1. **Bubble Sort** compares pairs of nums and swaps if needed, until largest 'bubbles' to end.
+</br>
 
-![Bubble Sort](./public/gifs/bubble.gif)
+**Bubble Sort** compares pairs of nums and swaps if needed, until largest 'bubbles' to end.
 
-2. **Merge Sort** divides the list into smaller sublists until each contains one element, then 'merges' the sublists in sorted order.
+</br>
 
-![Merge Sort](./public/gifs/merge.gif)
+<img src="./public/gifs/bubble.gif" width="80%">
 
-3. **Quick Sort** selects a pivot, separates smaller and bigger numbers around it, then sorts each part.
+</br>
 
-![Quick Sort](./public/gifs/quick.gif)
+**Merge Sort** divides the list into smaller sublists until each contains one element, then 'merges' the sublists in sorted order.
 
-4. **Insertion Sort** goes through the list one number at a time, inserting each one into its correct spot among the already sorted numbers.
+</br>
 
-![Insertion Sort](./public/gifs/insertion.gif)
+<img src="./public/gifs/merge.gif" width="80%">
 
-5. **Selection Sort** repeatedly finds the smallest unsorted element and swaps it into its correct position in the sorted part of the list.
+</br>
 
-![Selection Sort](./public/gifs/selection.gif)
+**Quick Sort** selects a pivot, separates smaller and bigger numbers around it, then sorts each part.
+
+</br>
+
+<img src="./public/gifs/quick.gif" width="80%">
+
+</br>
+
+**Insertion Sort** goes through the list one number at a time, inserting each one into its correct spot among the already sorted numbers.
+
+</br>
+
+<img src="./public/gifs/insertion.gif" width="80%">
+
+</br>
+
+**Selection Sort** repeatedly finds the smallest unsorted element and swaps it into its correct position in the sorted part of the list.
+
+</br>
+
+<img src="./public/gifs/selection.gif" width="80%">
 
 </br>
 
