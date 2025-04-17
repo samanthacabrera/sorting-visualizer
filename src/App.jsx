@@ -7,14 +7,12 @@ function App() {
   const [sortedIndices, setSortedIndices] = useState([]); 
   const [algorithm, setAlgorithm] = useState("bubble"); 
   const [explanation, setExplanation] = useState(""); 
+  const [animationSpeed, setAnimationSpeed] = useState(100);
 
   const colors = {
     compare: "#00BFFF", // blue
     sorted: "#8AE234",  // green
   };
-
-  // later: make animation speed adjustable
-  const ANIMATION_SPEED_MS = 100;
 
   const generateArray = () => {
     const newArray = [];
@@ -55,7 +53,7 @@ function App() {
       // inner loop: compare adj elements
       for (let j = 0; j < arrayCopy.length - 1 - i; j++) {
         setCurrentIndices([j, j + 1]); // highlight compared elements
-        await sleep(ANIMATION_SPEED_MS); // pause for anim
+        await sleep(animationSpeed); // pause for anim
         if (arrayCopy[j] > arrayCopy[j + 1]) {
           [arrayCopy[j], arrayCopy[j + 1]] = [arrayCopy[j + 1], arrayCopy[j]]; // swap
           setArray([...arrayCopy]); // update state
@@ -95,7 +93,7 @@ function App() {
     const tempSortedIndices = []; // store sorted indices
     while (i <= middleIdx && j <= endIdx) {
       setCurrentIndices([i, j]); // highlight compared elements
-      await sleep(ANIMATION_SPEED_MS); // pause for animation
+      await sleep(animationSpeed); // pause for animation
       if (auxiliaryArray[i] <= auxiliaryArray[j]) {
         mainArray[k] = auxiliaryArray[i]; // choose element from left half
         tempSortedIndices.push(k);
@@ -112,7 +110,7 @@ function App() {
     // copy remaining elements from left half
     while (i <= middleIdx) {
       setCurrentIndices([i]); // highlight element
-      await sleep(ANIMATION_SPEED_MS); // pause for animation
+      await sleep(animationSpeed); // pause for animation
       mainArray[k] = auxiliaryArray[i];
       tempSortedIndices.push(k);
       i++;
@@ -122,7 +120,7 @@ function App() {
     // copy remaining elements from right half
     while (j <= endIdx) {
       setCurrentIndices([j]); // highlight element
-      await sleep(ANIMATION_SPEED_MS); // pause for animation
+      await sleep(animationSpeed); // pause for animation
       mainArray[k] = auxiliaryArray[j];
       tempSortedIndices.push(k);
       j++;
@@ -147,7 +145,7 @@ function App() {
       let j = i - 1; // index to compare against
 
       setCurrentIndices([i]); // highlight current key
-      await sleep(ANIMATION_SPEED_MS); // pause for animation
+      await sleep(animationSpeed); // pause for animation
 
       // move elements greater than key one position to the right
       while (j >= 0 && arrayCopy[j] > key) {
@@ -155,12 +153,12 @@ function App() {
         arrayCopy[j + 1] = arrayCopy[j]; // shift element right
         j--;
         setArray([...arrayCopy]); // update array state
-        await sleep(ANIMATION_SPEED_MS); // pause for animation
+        await sleep(animationSpeed); // pause for animation
       }
 
       arrayCopy[j + 1] = key; // insert key into correct position
       setArray([...arrayCopy]); // update array state
-      await sleep(ANIMATION_SPEED_MS); // pause for animation
+      await sleep(animationSpeed); // pause for animation
 
       tempSorted.push(i); // mark current index as sorted
       setSortedIndices([...tempSorted]); // update sorted indices
@@ -183,13 +181,13 @@ function App() {
       let minIndex = i; // assume current element is the smallest
       for (let j = i + 1; j < arrayCopy.length; j++) {
         setCurrentIndices([minIndex, j]); // highlight current pair
-        await sleep(ANIMATION_SPEED_MS); // pause for animation
+        await sleep(animationSpeed); // pause for animation
         if (arrayCopy[j] < arrayCopy[minIndex]) minIndex = j; // find smaller element
       }
       if (minIndex !== i) {
         [arrayCopy[i], arrayCopy[minIndex]] = [arrayCopy[minIndex], arrayCopy[i]]; // swap elements
         setArray([...arrayCopy]); // update array
-        await sleep(ANIMATION_SPEED_MS); // pause for animation
+        await sleep(animationSpeed); // pause for animation
       }
       sorted.push(i); // mark current index as sorted
       setSortedIndices([...sorted]); // update sorted indices
@@ -224,17 +222,17 @@ function App() {
     let pivot = arr[high], i = low - 1; // set pivot and initial index
     for (let j = low; j < high; j++) {
       setCurrentIndices([j, high]); // highlight current pair
-      await sleep(ANIMATION_SPEED_MS); // pause for animation
+      await sleep(animationSpeed); // pause for animation
       if (arr[j] < pivot) {
         i++; // move i right if element is smaller than pivot
         [arr[i], arr[j]] = [arr[j], arr[i]]; // swap elements
         setArray([...arr]); // update array
-        await sleep(ANIMATION_SPEED_MS); // pause for animation
+        await sleep(animationSpeed); // pause for animation
       }
     }
     [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]]; // move pivot to correct position
     setArray([...arr]); // update array
-    await sleep(ANIMATION_SPEED_MS); // pause for animation
+    await sleep(animationSpeed); // pause for animation
     return i + 1; // return pivot index
   };
 
@@ -344,6 +342,30 @@ function App() {
           <p>Select an algorithm and press 'Sort Array'.</p>
         )}
       </div>
+
+      <div className="absolute top-1/2 left-12 flex flex-col items-center">
+        <div className="relative w-2 h-64 my-4">
+          <input
+            type="range"
+            min="50"
+            max="500"
+            value={animationSpeed}
+            onChange={(e) => setAnimationSpeed(Number(e.target.value))}
+            className="absolute inset-0 w-full h-full bg-gray-200 rounded-lg appearance-none cursor-pointer"
+            style={{
+              writingMode: "vertical-rl", 
+              transform: "rotate(180deg)",
+              transformOrigin: "center", 
+            }}
+            disabled={isSorting}
+          />
+        </div>
+
+        <div className="text-sm opacity-50 w-[100px]">
+          Speed: {animationSpeed} ms
+        </div>
+      </div>
+
     </div>
   );
 }
