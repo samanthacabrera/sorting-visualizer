@@ -6,7 +6,7 @@ This web app lets you see how different sorting algorithms work through interact
 
 ```bash
 git clone https://github.com/samanthacabrera/sorting-visualizer
-cd mediapipe-hand-tracker
+cd sorting-visualizer
 npm install
 npm run dev
 ```
@@ -61,12 +61,12 @@ Sorting algorithms are ways to arrange data in a specific order—usually ascend
 
 </br>
 
-Once you understand how each algorithm works, the next step is learning how to compare them. To do that, we look at Time and Space Complexity, which help us measure how efficient each algorithm is when handling different tasks.
+Once you understand how each algorithm works, the next step is learning how to compare them. To do that, we look at Time and Space Complexity. 
 
 **What is Time and Space Complexity?**
 
-- Time Complexity describes how the time to complete the algorithm grows as the size of the input grows.
-- Space Complexity describes how much extra memory the algorithm needs as it runs.
+- **Time Complexity** describes how the time to complete the algorithm grows as the size of the input grows.
+- **Space Complexity** describes how much extra memory the algorithm needs as it runs.
 
 These two measurements help us figure out which algorithm is best suited for a particular situation. Big O provides a standardized way to measure and compare the efficiency of different algorithms.
 
@@ -74,14 +74,16 @@ These two measurements help us figure out which algorithm is best suited for a p
 
 Big O is a mathematical way to describe how an algorithm’s time or space needs grow as the input grows.
 
-- O(1) means the algorithm takes the same time no matter how big the input is (constant time).
+- **O(1)** or constant time means the algorithm takes the same time no matter how big the input is. 
 
-- O(n) means the time grows directly with the input size.
+- **O(n)** or linear time means the time the algorithm takes grows directly with the size of the input.
 
-- O(n²) means the time grows a lot faster as input grows (quadratic time).
+- **O(n²)** or quadratic time means the time the algorithm takes grows much faster than the size of the input. 
 
-- O(log n) or O(n log n) is more efficient, especially for large inputs.
+- **O(log n)** or logarithmic time means the time the algorithm takes increases slowly even as the input gets much larger.
 
+- **O(n log n)** or linearithmic time means the time the algorithm takes grows faster than linear time but slower than quadratic time. 
+  
 </br>
 
 **Algorithm Performance Comparison**
