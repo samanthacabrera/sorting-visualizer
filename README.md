@@ -25,7 +25,7 @@ Sorting algorithms are ways to arrange data in a specific order—usually ascend
 
 </br>
 
-<img src="./public/gifs/bubble.gif" width="80%">
+<img src="./public/gifs/bubble.gif">
 
 </br>
 
@@ -33,7 +33,7 @@ Sorting algorithms are ways to arrange data in a specific order—usually ascend
 
 </br>
 
-<img src="./public/gifs/merge.gif" width="80%">
+<img src="./public/gifs/merge.gif">
 
 </br>
 
@@ -41,7 +41,7 @@ Sorting algorithms are ways to arrange data in a specific order—usually ascend
 
 </br>
 
-<img src="./public/gifs/quick.gif" width="80%">
+<img src="./public/gifs/quick.gif">
 
 </br>
 
@@ -49,7 +49,7 @@ Sorting algorithms are ways to arrange data in a specific order—usually ascend
 
 </br>
 
-<img src="./public/gifs/insertion.gif" width="80%">
+<img src="./public/gifs/insertion.gif">
 
 </br>
 
@@ -57,7 +57,7 @@ Sorting algorithms are ways to arrange data in a specific order—usually ascend
 
 </br>
 
-<img src="./public/gifs/selection.gif" width="80%">
+<img src="./public/gifs/selection.gif">
 
 </br>
 
